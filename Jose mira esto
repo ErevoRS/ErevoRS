@@ -79,3 +79,316 @@
 	</script>
 </body>
 </html>
+
+CSS pushbar
+
+html.pushbar_locked {
+    overflow: hidden;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+.pushbar_locked .pushbar_main_content.pushbar_blur {
+    filter: blur(15px);
+}
+
+.pushbar_overlay {
+    z-index: -999;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    will-change: opacity;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+    background: #3c3442;
+}
+
+html.pushbar_locked .pushbar_overlay {
+    opacity: 0.8;
+    z-index: 999;
+}
+
+[data-pushbar-id] {
+    z-index: 1000;
+    position: fixed;
+    overflow-y: auto;
+    will-change: transform;
+    transition: transform 0.5s ease;
+    background: #fff;
+}
+
+[data-pushbar-direction="left"][data-pushbar-id], [data-pushbar-direction="right"][data-pushbar-id] {
+    top: 0;
+    width: 256px;
+    max-width: 100%;
+    height: 100%;
+}
+
+[data-pushbar-direction="top"][data-pushbar-id], [data-pushbar-direction="bottom"][data-pushbar-id] {
+    left: 0;
+    width: 100%;
+    min-height: 150px;
+}
+
+[data-pushbar-direction="left"][data-pushbar-id] {
+    left: 0;
+    transform: translateZ(0) translateX(-100%);
+}
+
+[data-pushbar-direction="right"][data-pushbar-id] {
+    right: 0;
+    transform: translateZ(0) translateX(100%);
+}
+
+[data-pushbar-direction="top"][data-pushbar-id] {
+    top: 0;
+    transform: translateZ(0) translateY(-100%);
+}
+
+[data-pushbar-direction="bottom"][data-pushbar-id] {
+    bottom: 0;
+    transform: translateZ(0) translateY(100%);
+}
+
+[data-pushbar-id].opened {
+    display: block;
+    transform: translateX(0px) translateY(0px);
+}
+ CSS estilos 
+ 
+  {
+	padding: 0;
+	margin: 0;
+	box-sizing:border-box;
+	font-family: 'Roboto Slab', serif;
+}
+
+body {
+	background: #F2F2F2;
+}
+
+a {
+	text-decoration: none;
+}
+
+.contenedor {
+	width: 90%;
+	max-width: 1000px;
+	margin: auto;
+	padding-bottom: 120px;
+}
+
+/* ----- ----- HEADER ----- ----- */
+header {
+	width: 100%;
+	text-align: center;
+	padding: 60px 0;
+}
+
+header h1 {
+	font-weight: normal;
+	font-size: 40px;
+	line-height: 40px;
+	margin-bottom: 10px;
+}
+
+header h2 {
+	font-weight: 300;
+	font-size: 24px;
+	line-height: 24px;
+	color: #919191;
+}
+
+/* ----- ----- MAIN ----- ----- */
+main {
+	width: 100%;
+}
+
+main nav {
+	width: 100%;
+	display: flex;
+	margin-bottom: 60px;
+}
+
+main nav .btn-menu {
+	display: inline-block;
+	width: 65px;
+	height: 65px;
+	border: 1px solid #000;
+	background: transparent;
+	cursor: pointer;
+	font-size: 28px;
+	margin-right: 20px;
+	transition: .3s ease all;
+}
+
+main nav .btn-menu:hover {
+	border:1px solid #828282;
+	color: #828282;
+}
+
+main nav .banner {
+	display: inline-block;
+	width: 100%;
+	background: url(../img/banner.jpg);
+	background-size: cover;
+	text-align: center;
+	height: 65px;
+	line-height: 65px;
+	font-size: 26px;
+	font-weight: 300;
+	color: #fff;
+}
+
+main .productos {
+	display: flex;
+	justify-content: space-between;
+}
+
+main .productos figure {
+	max-width: 320px;	
+	box-shadow:0px 3px 6px rgba(0,0,0,.16);
+}
+
+main .productos img {
+	vertical-align: top;
+	width: 100%;
+}
+
+main .productos figure figcaption a {
+	background: #000;
+	display: inline-block;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	color: #fff;
+	height: 60px;
+	line-height: 60px;
+	padding: 0 20px;
+	font-weight: 300;
+}
+
+/* ------------------------- */
+/* Pushbars: Estilos Generales */
+/* ------------------------- */
+
+
+/* ----- ----- Pushbar: Menu de Navegacion ----- ----- */
+
+/* ----- ----- Pushbar: Carrito de Compras ----- ----- */
+
+/* ----- ----- Pushbar: Productos ----- ----- */
+
+/* ----- ----- Pushbar: Formulario Newsletter  ----- ----- */
+
+/* ------------------------- */
+/* MEDIA QUERIES */
+/* ------------------------- */
+@media screen and (max-width: 600px) {
+	header h1 {
+		font-size: 30px;
+		line-height: 30px;
+	}
+
+	header h2 {
+		font-size: 16px;
+		line-height: 16px;
+	}
+
+	main nav .banner {
+		font-size: 14px;
+	}
+
+	main .productos {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	main .productos figure {
+		margin-bottom: 40px;
+	}
+}
+
+JS pushbar
+
+class Pushbar {
+    constructor(config = { overlay: true, blur: false }) {
+        this.activeId;
+        this.activeElement;
+        this.overlayElement;
+        if (config.overlay) {
+            this.overlayElement = document.createElement('div');
+            this.overlayElement.classList.add('pushbar_overlay');
+            document.querySelector('body').appendChild(this.overlayElement);
+        }
+        if (config.blur) {
+            const mainContent = document.querySelector('.pushbar_main_content');
+            if (mainContent) {
+                mainContent.classList.add('pushbar_blur');
+            }
+        }
+        this.bindEvents();
+    }
+
+    emitOpening() {
+        const event = new CustomEvent('pushbar_opening', { bubbles: true, detail: { element: this.activeElement, id: this.activeId } });
+        this.activeElement.dispatchEvent(event);
+    }
+
+    emitClosing() {
+        const event = new CustomEvent('pushbar_closing', { bubbles: true, detail: { element: this.activeElement, id: this.activeId } });
+        this.activeElement.dispatchEvent(event);
+    }
+
+    handleOpenEvent(e) {
+        e.preventDefault();
+        const pushbarId = e.currentTarget.getAttribute('data-pushbar-target');
+        this.open(pushbarId);
+    }
+
+    handleCloseEvent(e) {
+        e.preventDefault();
+        this.close();
+    }
+
+    handleKeyEvent(e) {
+        if (e.keyCode === 27) this.close();
+    }
+
+    bindEvents() {
+        const triggers = document.querySelectorAll('[data-pushbar-target]');
+        const closers = document.querySelectorAll('[data-pushbar-close]');
+        triggers.forEach(trigger => trigger.addEventListener('click', e => this.handleOpenEvent(e), false));
+        closers.forEach(closer => closer.addEventListener('click', e => this.handleCloseEvent(e), false));
+        if (this.overlayElement) {
+            this.overlayElement.addEventListener('click', e => this.handleCloseEvent(e), false);
+        }
+        document.addEventListener('keyup', e => this.handleKeyEvent(e));
+    }
+
+    open(pushbarId) {
+        if (this.activeId === String(pushbarId) || !pushbarId) return;
+        if (this.activeId && this.activeId !== String(pushbarId)) this.close();
+        this.activeId = pushbarId
+        this.activeElement = document.querySelector(`[data-pushbar-id="${this.activeId}"]`)
+        if (!this.activeElement) return;
+        this.emitOpening();
+        this.activeElement.classList.add('opened');
+        const pageRootElement = document.querySelector('html')
+        pageRootElement.classList.add('pushbar_locked');
+        pageRootElement.setAttribute('pushbar', pushbarId)
+    }
+
+    close() {
+        if (!this.activeId) return;
+        this.emitClosing();
+        this.activeElement.classList.remove('opened');
+        const pageRootElement = document.querySelector('html')
+        pageRootElement.classList.remove('pushbar_locked');
+        pageRootElement.removeAttribute('pushbar')
+        this.activeId = null;
+        this.activeElement = null;
+    }
+}
